@@ -41,7 +41,11 @@ body {
   background-color: rgba(113, 43, 43, 0.75);
   padding: 12px 18px;
   border-radius: 12px;
-  margin-right: 20px;
+  margin-right: 70px;
+  margin-top: 0.3%;
+  margin-left: 0.5%;
+  margin-bottom: 1.5%;
+  
   border: #cf14dc 2px solid;
   width: fit-content;
   max-width: fit-content;
@@ -95,6 +99,32 @@ body {
   font-weight: 600;
   cursor: pointer;
 }
+
+
+/*==========================================FONT====================================*/
+
+ h1 {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+
+
+p {
+  font-family: "JetBrains Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+
+
+
+
+
+
 /*==========================================DEBUGGING====================================*/
 
 
