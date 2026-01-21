@@ -1,0 +1,88 @@
+
+/*==========================================BODY-BACKGROUND====================================*/
+body { 
+
+  background-color: #0b0d12;
+
+  background-image:
+    /* RED DOT GRID */
+    radial-gradient(
+      rgba(134, 45, 131, 0.302) 9px, /* rgba 255, 60, 90, 0.18 */
+      transparent 0.9px
+    ),
+
+    /* GREEN DOT GRID */
+    radial-gradient(
+      rgba(39, 167, 109, 0.18) 2px,
+      transparent 1px
+    );
+
+  background-size:
+    18px 18px,
+    18px 18px;
+
+  /* grid spacing for both dot layers */
+  background-position:
+    0 0,
+    50% 50%;
+
+  /* overlap perfectly */
+  background-repeat: repeat;
+}
+
+/*==========================================TEXT-BACKGROUND====================================*/
+.text-bg { 
+  display: inline-block;
+  background-color: rgba(113, 43, 43, 0.75);
+  padding: 12px 18px;
+  border-radius: 12px;
+}
+
+/*==========================================MINI-GAME====================================*/
+#mini-game {
+  width: 320px;
+  background: rgba(0,0,0,0.75);
+  border: 1px solid rgba(255,60,90,0.4);
+  border-radius: 14px;
+  padding: 14px;
+  color: #fff;
+  font-family: system-ui, sans-serif;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.game-area {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background: #0b0d12;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.target {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background: #ff3c5a;
+  border-radius: 6px;
+  cursor: pointer;
+  display: none;
+}
+
+#startBtn {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255,60,90,0.8);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
