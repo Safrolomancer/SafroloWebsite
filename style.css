@@ -28,7 +28,12 @@ body {
 
   /* overlap perfectly */
   background-repeat: repeat;
+
+  display: flex;
+ 
 }
+
+
 
 /*==========================================TEXT-BACKGROUND====================================*/
 .text-bg { 
@@ -36,11 +41,16 @@ body {
   background-color: rgba(113, 43, 43, 0.75);
   padding: 12px 18px;
   border-radius: 12px;
+  margin-right: 20px;
+  border: #cf14dc 2px solid;
+  width: fit-content;
+  max-width: fit-content;
 }
 
 /*==========================================MINI-GAME====================================*/
 #mini-game {
   width: 320px;
+  height: 320px;
   background: rgba(0,0,0,0.75);
   border: 1px solid rgba(255,60,90,0.4);
   border-radius: 14px;
@@ -86,14 +96,6 @@ body {
   cursor: pointer;
 }
 /*==========================================DEBUGGING====================================*/
-.parent-container {
-  display: flex;
-  flex-direction: column;
-}
 
-div {
 
-  border: 3px solid rgba(42, 164, 42, 0.4);
-
-}
 
