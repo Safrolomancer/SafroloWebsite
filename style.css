@@ -85,4 +85,15 @@ body {
   font-weight: 600;
   cursor: pointer;
 }
+/*==========================================DEBUGGING====================================*/
+.parent-container {
+  display: flex;
+  flex-direction: column;
+}
+
+div {
+
+  border: 3px solid rgba(42, 164, 42, 0.4);
+
+}
 
