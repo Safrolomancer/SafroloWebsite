@@ -30,6 +30,9 @@ body {
   background-repeat: repeat;
 
   display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  overflow-x: hidden;
  
 }
 
@@ -47,8 +50,8 @@ body {
   margin-bottom: 1.5%;
   
   border: #cf14dc 2px solid;
-  width: fit-content;
-  max-width: fit-content;
+  width: auto;
+  max-width: 100%;
 }
 
 /*==========================================MINI-GAME====================================*/
@@ -106,7 +109,7 @@ body {
  h1 {
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 700;
+  font-weight: clamp(18px, 5vw, 28px);
   font-style: normal;
 }
 
@@ -115,8 +118,9 @@ body {
 p {
   font-family: "JetBrains Mono", monospace;
   font-optical-sizing: auto;
-  font-weight: 500;
-  font-style: normal;
+  font-weight: 900;
+  font-size: 17px;
+  word-break: break-word;
 }
 
 
@@ -127,5 +131,30 @@ p {
 
 /*==========================================DEBUGGING====================================*/
 
+
+@media (max-width: 768px) {
+
+  body {
+    flex-direction: column; 
+    align-items: center;
+  }
+
+  .text-bg {
+    margin: 16px;
+    max-width: 95%;
+  }
+
+  #mini-game {
+    width: 90%;
+    max-width: 320px;
+    margin-bottom: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  p {
+    font-size: 12px;
+  }
+}
 
 
