@@ -13,9 +13,10 @@ let gameInterval;
 let timerInterval;
 let isGameRunning = false;
 
+const API_BASE = "https://safrolowebsite-production.up.railway.app";
 const API = {
-  submit: "/api/score",
-  leaderboard: "/api/leaderboard",
+  submit: `${API_BASE}/api/score`,
+  leaderboard: `${API_BASE}/api/leaderboard`,
 };
 
 function setStatus(message) {
