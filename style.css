@@ -1,160 +1,333 @@
+:root {
+  --bg-main: #050a09;
+  --bg-card: rgba(8, 18, 14, 0.83);
+  --line: rgba(119, 255, 176, 0.4);
+  --line-soft: rgba(119, 255, 176, 0.18);
+  --text-main: #dfffe9;
+  --text-soft: #93b8a0;
+  --accent: #4dff99;
+  --accent-hot: #7effbf;
+}
 
-/*==========================================BODY-BACKGROUND====================================*/
-body { 
+* {
+  box-sizing: border-box;
+}
 
-  background-color: #0b0d12;
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Space Grotesk", sans-serif;
+  color: var(--text-main);
+  background:
+    radial-gradient(circle at 20% 20%, #143026 0%, transparent 35%),
+    radial-gradient(circle at 80% 10%, #0d1f1a 0%, transparent 30%),
+    linear-gradient(150deg, #050a09 0%, #030606 45%, #020404 100%);
+  overflow-x: hidden;
+}
 
-  background-image:
-    /* RED DOT GRID */
-    radial-gradient(
-      rgba(134, 45, 131, 0.302) 9px, /* rgba 255, 60, 90, 0.18 */
-      transparent 0.9px
-    ),
+#matrix-bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.32;
+}
 
-    /* GREEN DOT GRID */
-    radial-gradient(
-      rgba(39, 167, 109, 0.18) 2px,
-      transparent 1px
-    );
+.layout {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 2.2rem 1rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 1rem;
+}
 
-  background-size:
-    18px 18px,
-    18px 18px;
+.profile-card,
+.game-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(2px);
+  border: 1px solid var(--line-soft);
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
 
-  /* grid spacing for both dot layers */
-  background-position:
-    0 0,
-    50% 50%;
+.profile-card {
+  padding: 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
 
-  /* overlap perfectly */
-  background-repeat: repeat;
+.profile-card::after {
+  content: "";
+  position: absolute;
+  inset: -35% auto auto -20%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(126, 255, 191, 0.14), transparent 70%);
+  pointer-events: none;
+}
 
+.eyebrow {
+  margin: 0;
+  color: var(--accent-hot);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+h1 {
+  margin: 0.3rem 0 0.55rem;
+  font-size: clamp(1.65rem, 4vw, 2.5rem);
+  line-height: 1.1;
+}
+
+.intro {
+  margin: 0 0 1rem;
+  color: var(--text-soft);
+  font-size: clamp(0.95rem, 2.2vw, 1.1rem);
+  max-width: 70ch;
+}
+
+.stack-list {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
-  overflow-x: hidden;
- 
+  gap: 0.5rem;
+  margin: 0 0 1rem;
 }
 
-
-
-/*==========================================TEXT-BACKGROUND====================================*/
-.text-bg { 
+.stack-list span {
   display: inline-block;
-  background-color: rgba(113, 43, 43, 0.75);
-  padding: 12px 18px;
-  border-radius: 12px;
-  margin-right: 70px;
-  margin-top: 0.3%;
-  margin-left: 0.5%;
-  margin-bottom: 1.5%;
-  
-  border: #cf14dc 2px solid;
-  width: auto;
-  max-width: 100%;
+  padding: 0.28rem 0.6rem;
+  border: 1px solid rgba(126, 255, 191, 0.35);
+  border-radius: 999px;
+  background: rgba(4, 17, 12, 0.68);
+  color: #cbffdd;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
 }
 
-/*==========================================MINI-GAME====================================*/
+.profile-details {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.35rem;
+}
+
+.detail-card {
+  border: 1px solid rgba(126, 255, 191, 0.2);
+  border-radius: 11px;
+  background: linear-gradient(180deg, rgba(4, 15, 11, 0.9), rgba(6, 18, 13, 0.76));
+  padding: 0.75rem 0.85rem;
+}
+
+.detail-card h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.79rem;
+  color: #95f5bc;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.detail-card p,
+.detail-card li {
+  margin: 0;
+  color: #d0f9de;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.detail-card ul {
+  margin: 0;
+  padding-left: 1.05rem;
+}
+
+.detail-card li + li {
+  margin-top: 0.2rem;
+}
+
+.contact-links {
+  margin-top: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.contact-links a {
+  text-decoration: none;
+  display: inline-block;
+  padding: 0.36rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(126, 255, 191, 0.36);
+  color: #d8ffe8;
+  background: rgba(6, 20, 14, 0.85);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.contact-links a:hover {
+  transform: translateY(-1px);
+  border-color: rgba(126, 255, 191, 0.8);
+  box-shadow: 0 0 16px rgba(126, 255, 191, 0.22);
+}
+
 #mini-game {
-  width: 320px;
-  height: 320px;
-  background: rgba(0,0,0,0.75);
-  border: 1px solid rgba(255,60,90,0.4);
-  border-radius: 14px;
-  padding: 14px;
-  color: #fff;
-  font-family: system-ui, sans-serif;
+  padding: 1rem;
+  align-self: start;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.nick-label {
+  display: block;
+  margin: 0 0 0.35rem;
+  font-size: 0.74rem;
+  letter-spacing: 0.05em;
+  color: var(--text-soft);
+  text-transform: uppercase;
+}
+
+.nick-input {
+  width: 100%;
+  margin: 0 0 0.7rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid rgba(119, 255, 176, 0.35);
+  background: rgba(6, 14, 11, 0.8);
+  color: var(--text-main);
+  font-family: inherit;
+}
+
+.nick-input:focus {
+  outline: 1px solid rgba(126, 255, 191, 0.65);
+}
+
+.game-card h2 {
+  margin: 0 0 0.8rem;
+  font-size: 1rem;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .game-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 0.65rem;
+  color: var(--text-soft);
 }
 
 .game-area {
   position: relative;
   width: 100%;
   height: 200px;
-  background: #0b0d12;
+  margin-bottom: 0.8rem;
   border-radius: 10px;
+  border: 1px solid rgba(119, 255, 176, 0.3);
+  background:
+    linear-gradient(transparent 95%, rgba(119, 255, 176, 0.08) 96%),
+    linear-gradient(90deg, transparent 95%, rgba(119, 255, 176, 0.08) 96%),
+    #050b08;
+  background-size: 22px 22px, 22px 22px, auto;
   overflow: hidden;
-  margin-bottom: 10px;
 }
 
 .target {
   position: absolute;
   width: 32px;
   height: 32px;
-  background: #ff3c5a;
-  border-radius: 6px;
-  cursor: pointer;
   display: none;
+  border-radius: 7px;
+  cursor: pointer;
+  background: radial-gradient(circle at 30% 30%, #b8ffd6, #47e987 55%, #15ad54 100%);
+  box-shadow: 0 0 20px rgba(76, 255, 160, 0.55);
 }
 
 #startBtn {
   width: 100%;
-  padding: 8px;
-  border-radius: 8px;
-  border: none;
-  background: rgba(255,60,90,0.8);
-  color: white;
+  border: 1px solid #57ea9c;
+  border-radius: 9px;
+  padding: 0.58rem 0.7rem;
+  background: linear-gradient(180deg, #0d2f21, #0a1f16);
+  color: var(--text-main);
+  font-family: inherit;
   font-weight: 600;
   cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
-
-/*==========================================FONT====================================*/
-
- h1 {
-  font-family: "Inter", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: clamp(18px, 5vw, 28px);
-  font-style: normal;
+#startBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 18px rgba(101, 255, 175, 0.35);
 }
 
-
-
-p {
-  font-family: "JetBrains Mono", monospace;
-  font-optical-sizing: auto;
-  font-weight: 900;
-  font-size: 17px;
-  word-break: break-word;
+#startBtn:active {
+  transform: translateY(0);
 }
 
+.game-status {
+  min-height: 1.2rem;
+  margin: 0.65rem 0 0;
+  color: var(--text-soft);
+  font-size: 0.75rem;
+}
 
+.leaderboard {
+  margin-top: 0.45rem;
+  border: 1px solid rgba(119, 255, 176, 0.2);
+  border-radius: 10px;
+  padding: 0.55rem;
+  background: rgba(3, 10, 7, 0.7);
+}
 
+.leaderboard h3 {
+  margin: 0 0 0.45rem;
+  font-size: 0.77rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #95f5bc;
+}
 
+.leaderboard table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.7rem;
+}
 
+.leaderboard th,
+.leaderboard td {
+  padding: 0.3rem 0.2rem;
+  border-bottom: 1px solid rgba(119, 255, 176, 0.14);
+  text-align: left;
+}
 
+.leaderboard th {
+  color: #acefc9;
+  font-weight: 600;
+}
 
-/*==========================================DEBUGGING====================================*/
+.leaderboard td {
+  color: #d0f9de;
+}
 
+.leaderboard tr:last-child td {
+  border-bottom: none;
+}
 
-@media (max-width: 768px) {
-
-  body {
-    flex-direction: column; 
-    align-items: center;
+@media (max-width: 920px) {
+  .layout {
+    grid-template-columns: 1fr;
   }
 
-  .text-bg {
-    margin: 16px;
-    max-width: 95%;
+  .intro {
+    max-width: 100%;
   }
 
-  #mini-game {
-    width: 90%;
-    max-width: 320px;
-    margin-bottom: 24px;
+  .detail-card p,
+  .detail-card li {
+    font-size: 0.88rem;
   }
 }
-
-@media (max-width: 768px) {
-  p {
-    font-size: 12px;
-  }
-}
-
-

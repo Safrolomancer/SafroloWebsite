@@ -1,77 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Safrolomancer</title>
-    <link rel="stylesheet" href="style.css">
-
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Oswald:wght@524&family=Sedan+SC&display=swap" rel="stylesheet">
-      
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matvii Krylov | Software Developer</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
-
 <body>
+  <canvas id="matrix-bg" aria-hidden="true"></canvas>
 
-    <div class="text-bg">
+  <main class="layout">
+    <section class="profile-card">
+      <p class="eyebrow">Software Engineering Student</p>
+      <h1>Matvii Krylov</h1>
+      <p class="intro">
+        I build clean and practical web interfaces, solve real production bugs, and steadily grow into a reliable full-stack engineer.
+      </p>
+      <div class="stack-list" aria-label="Tech and tools">
+        <span>Java</span>
+        <span>JavaScript</span>
+        <span>Python</span>
+        <span>HTML/CSS</span>
+        <span>SQL (basic)</span>
+        <span>Git/GitHub</span>
+        <span>Linux</span>
+      </div>
 
-        <h1> /** Class: Profile </h1>
-        <p>
-            public class DeveloperProfile {
-            <br> &nbsp;&nbsp; String name = "Matvii Krylov";
-            <br> &nbsp;&nbsp; String education = "Bachelor's (H) in Software Engineering," + "SETU";        </p>
-        <p>
-            <br> &nbsp;&nbsp; String[] technicalSkills = {
-            <br> &nbsp;&nbsp;&nbsp;&nbsp; "Java",
-            <br> &nbsp;&nbsp;&nbsp;&nbsp; "JavaScript",
-            <br> &nbsp;&nbsp;&nbsp;&nbsp; "HTML/CSS",
-            <br> &nbsp;&nbsp;&nbsp;&nbsp; "Linux (basic experience)",
-            <br> &nbsp;&nbsp;&nbsp;&nbsp; "Git/GitHub",
-            <br> &nbsp;&nbsp;&nbsp;&nbsp; "VS Code", };
-        </p>
-        <p>
-            <br> &nbsp;&nbsp; String experience =
-            <br> &nbsp;&nbsp;&nbsp;&nbsp; "Worked with the Ukrainian Ports Association," +
-            <br> &nbsp;&nbsp;&nbsp;&nbsp; "maintaining and curting a website. " +
-            <br> &nbsp;&nbsp;&nbsp;&nbsp; "Handled layout adjustments and attempted to fix technical issues
-            <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; as they appeared.";
-        </p>
-       <!-- <p>
-            <br> &nbsp;&nbsp; //TODO:
-            <br> &nbsp;&nbsp; // CISPA European AI & Cybersecurity Hackathon Championship participation. 
-            <br> &nbsp;&nbsp; // ZeroDays CTF 2026 participation. Dublin, Ireland.
-            <br> &nbsp;&nbsp; // Further expand technical skills and experience.
-        </p>
+      <section class="profile-details" aria-label="Profile details">
+        <article class="detail-card">
+          <h3>Focus</h3>
+          <ul>
+            <li>Frontend quality and clean UI architecture</li>
+            <li>Backend fundamentals and practical problem solving</li>
+          </ul>
+        </article>
 
-        <p>
-            /* Contact Information */
-           <br> &nbsp;&nbsp;&nbsp;&nbsp;Contact[] contacts = {
-                <br> &nbsp;&nbsp;&nbsp;&nbsp; new Contact("Email"),
-                <br> &nbsp;&nbsp;&nbsp;&nbsp; new Contact("LinkedIn"),
-                <br> &nbsp;&nbsp;&nbsp;&nbsp; new Contact("GitHub"), };
-        </p> -->
+        <article class="detail-card">
+          <h3>Education</h3>
+          <p>Bachelor's (H) in Software Engineering | Student at SETU | Graduating in 2029</p>
+          <p>Bachelor's (H) in Management and Marketing | Student at ONTU | Graduating in 2026</p>
+        </article>
 
-    </div>
+        <article class="detail-card">
+          <h3>Experience</h3>
+          <p><strong>Ukrainian Ports Association</strong></p>
+          <ul>
+            <li>Maintained and curated website pages</li>
+            <li>Improved layout consistency</li>
+            <li>Fixed live technical issues under deadlines</li>
+          </ul>
+        </article>
 
-    <div id="mini-game">
-        <div class="game-header">
-            <span>Score: <b id="score">0</b></span>
-            <span>Time: <b id="time">30</b>s</span>
-        </div>
+        <article class="detail-card">
+          <h3>Achievements</h3>
+          <ul>
+            <li>2nd place, Capture The Flag (CTF), Computer Society, South East Technological University</li>
+            <li>7th place [Team: FiveFingers], CISPA Cybersecurity and AI European Championship Hackathon, Stockholm, Sweden</li>
+          </ul>
+        </article>
 
-        <div class="game-area" id="gameArea">
-            <div class="target" id="target"></div>
-        </div>
+        <article class="detail-card">
+          <h3>Mindset</h3>
+          <p>Build clean systems, ship stable updates, and improve continuously.</p>
+        </article>
+      </section>
 
-        <button id="startBtn">Start Game</button>
-    </div>
+      <div class="contact-links">
+        <a href="mailto:m.g.krylovua@gmail.com" target="_blank" rel="noopener noreferrer">Email</a>
+        <a href="https://www.linkedin.com/in/matvii-krylov-600332374/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://github.com/Safrolomancer" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </section>
 
+    <aside id="mini-game" class="game-card">
+      <h2>Reflex Mini-Game</h2>
+      <label class="nick-label" for="nickname">Nickname</label>
+      <input id="nickname" class="nick-input" type="text" maxlength="24" placeholder="Your nickname" value="Player">
+      <div class="game-header">
+        <span>Score: <b id="score">0</b></span>
+        <span>Time: <b id="time">30</b>s</span>
+      </div>
 
+      <div class="game-area" id="gameArea">
+        <div class="target" id="target"></div>
+      </div>
 
-    <script src="game.js"></script>
+      <button id="startBtn">Start Game</button>
+      <p id="gameStatus" class="game-status" aria-live="polite"></p>
+
+      <section class="leaderboard" aria-label="Leaderboard">
+        <h3>Leaderboard</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Player</th>
+              <th>Score</th>
+              <th>Last IP</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardBody">
+            <tr>
+              <td colspan="4">No games yet</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </aside>
+  </main>
+
+  <script src="matrix-bg.js"></script>
+  <script src="game.js"></script>
 </body>
-
 </html>
