@@ -3,12 +3,6 @@ name: Deploy Frontend To Hostinger
 on:
   push:
     branches: [main]
-    paths:
-      - "index.html"
-      - "style.css"
-      - "game.js"
-      - "matrix-bg.js"
-      - ".github/workflows/deploy-hostinger.yml"
 
 jobs:
   deploy:
