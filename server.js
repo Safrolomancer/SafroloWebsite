@@ -8,6 +8,7 @@ const ROOT = __dirname;
 const DB_DIR = path.join(ROOT, "data");
 const DB_FILE = path.join(DB_DIR, "leaderboard.json");
 const LEADERBOARD_LIMIT = 5;
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN || "";
 
 function ensureDb() {
   if (!fs.existsSync(DB_DIR)) fs.mkdirSync(DB_DIR, { recursive: true });
@@ -55,9 +56,23 @@ function sendJson(res, status, payload) {
     "Content-Length": Buffer.byteLength(body),
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Admin-Token",
   });
   res.end(body);
+}
+
+function getAdminTokenFromRequest(req, url) {
+  const auth = String(req.headers.authorization || "");
+  const bearer = auth.startsWith("Bearer ") ? auth.slice(7).trim() : "";
+  const headerToken = String(req.headers["x-admin-token"] || "").trim();
+  const queryToken = String(url.searchParams.get("token") || "").trim();
+  return bearer || headerToken || queryToken;
+}
+
+function isAdminAuthorized(req, url) {
+  if (!ADMIN_TOKEN) return false;
+  const token = getAdminTokenFromRequest(req, url);
+  return token && token === ADMIN_TOKEN;
 }
 
 function sendFile(res, filePath) {
@@ -102,6 +117,16 @@ function handleLeaderboardGet(res) {
   sendJson(res, 200, { scores });
 }
 
+function handleAdminLeaderboardGet(req, res, url) {
+  if (!isAdminAuthorized(req, url)) {
+    sendJson(res, 401, { error: "Unauthorized" });
+    return;
+  }
+
+  const scores = readScores().sort((a, b) => b.playedAt.localeCompare(a.playedAt));
+  sendJson(res, 200, { scores });
+}
+
 function handleScorePost(req, res) {
   let body = "";
   req.on("data", (chunk) => {
@@ -136,6 +161,7 @@ function handleScorePost(req, res) {
       playedAt: new Date().toISOString(),
       ipMasked: maskIp(rawIp),
       ipKey: createIpKey(rawIp),
+      ipFull: rawIp,
     };
 
     const scores = readScores();
@@ -156,6 +182,11 @@ const server = http.createServer((req, res) => {
 
   if (url.pathname === "/api/leaderboard" && req.method === "GET") {
     handleLeaderboardGet(res);
+    return;
+  }
+
+  if (url.pathname === "/api/admin/leaderboard-full" && req.method === "GET") {
+    handleAdminLeaderboardGet(req, res, url);
     return;
   }
 
