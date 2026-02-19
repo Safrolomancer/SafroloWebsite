@@ -3,7 +3,6 @@ const gameArea = document.getElementById("gameArea");
 const scoreEl = document.getElementById("score");
 const timeEl = document.getElementById("time");
 const startBtn = document.getElementById("startBtn");
-const nicknameInput = document.getElementById("nickname");
 const leaderboardBody = document.getElementById("leaderboardBody");
 const gameStatus = document.getElementById("gameStatus");
 
@@ -23,13 +22,6 @@ function setStatus(message) {
   gameStatus.textContent = message;
 }
 
-function sanitizeNickname(raw) {
-  return String(raw || "")
-    .trim()
-    .replace(/[^\w\-\s]/g, "")
-    .slice(0, 24);
-}
-
 async function loadLeaderboard() {
   try {
     const response = await fetch(API.leaderboard);
@@ -43,18 +35,16 @@ async function loadLeaderboard() {
 
 function renderLeaderboard(scores) {
   if (!scores.length) {
-    leaderboardBody.innerHTML = "<tr><td colspan='4'>No games yet</td></tr>";
+    leaderboardBody.innerHTML = "<tr><td colspan='3'>No games yet</td></tr>";
     return;
   }
 
   leaderboardBody.innerHTML = scores
     .map((item, index) => {
-      const name = String(item.nickname || "Player");
       const itemScore = Number(item.score || 0);
       const ipMasked = String(item.ipMasked || "unknown");
       return `<tr>
         <td>${index + 1}</td>
-        <td>${name}</td>
         <td>${itemScore}</td>
         <td>${ipMasked}</td>
       </tr>`;
@@ -63,17 +53,15 @@ function renderLeaderboard(scores) {
 }
 
 async function submitScore() {
-  const nickname = sanitizeNickname(nicknameInput.value) || "Player";
-  nicknameInput.value = nickname;
   try {
     const response = await fetch(API.submit, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nickname, score }),
+      body: JSON.stringify({ score }),
     });
     if (!response.ok) throw new Error("Submit failed");
     await loadLeaderboard();
-    setStatus(`Saved: ${nickname} - ${score}`);
+    setStatus(`Saved score: ${score}`);
   } catch {
     setStatus("Could not save score right now. Please try again.");
   }

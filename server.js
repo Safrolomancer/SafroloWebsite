@@ -103,7 +103,7 @@ function sendFile(res, filePath) {
 function handleLeaderboardGet(res) {
   const bestByIp = new Map();
   for (const row of readScores()) {
-    const key = row.ipKey || row.ipMasked || String(row.nickname || "").trim().toLowerCase();
+    const key = row.ipKey || row.ipMasked || "unknown";
     if (!key) continue;
     const prev = bestByIp.get(key);
     if (!prev || row.score > prev.score || (row.score === prev.score && row.playedAt > prev.playedAt)) {
@@ -142,13 +142,8 @@ function handleScorePost(req, res) {
       return;
     }
 
-    const nickname = String(payload.nickname || "").trim().slice(0, 24);
     const score = Number(payload.score);
 
-    if (!nickname) {
-      sendJson(res, 400, { error: "Nickname is required" });
-      return;
-    }
     if (!Number.isFinite(score) || score < 0 || score > 9999) {
       sendJson(res, 400, { error: "Invalid score" });
       return;
@@ -156,7 +151,6 @@ function handleScorePost(req, res) {
 
     const rawIp = getClientIp(req);
     const item = {
-      nickname,
       score: Math.floor(score),
       playedAt: new Date().toISOString(),
       ipMasked: maskIp(rawIp),
