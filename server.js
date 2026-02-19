@@ -1,6 +1,7 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 
 const PORT = process.env.PORT || 3000;
 const ROOT = __dirname;
@@ -34,6 +35,10 @@ function maskIp(ip) {
   const parts = ip.split(".");
   if (parts.length !== 4) return ip;
   return `${parts[0]}.${parts[1]}.*.*`;
+}
+
+function createIpKey(ip) {
+  return crypto.createHash("sha256").update(String(ip || "unknown")).digest("hex").slice(0, 16);
 }
 
 function getClientIp(req) {
@@ -81,17 +86,17 @@ function sendFile(res, filePath) {
 }
 
 function handleLeaderboardGet(res) {
-  const bestByNickname = new Map();
+  const bestByIp = new Map();
   for (const row of readScores()) {
-    const key = String(row.nickname || "").trim().toLowerCase();
+    const key = row.ipKey || row.ipMasked || String(row.nickname || "").trim().toLowerCase();
     if (!key) continue;
-    const prev = bestByNickname.get(key);
+    const prev = bestByIp.get(key);
     if (!prev || row.score > prev.score || (row.score === prev.score && row.playedAt > prev.playedAt)) {
-      bestByNickname.set(key, row);
+      bestByIp.set(key, row);
     }
   }
 
-  const scores = Array.from(bestByNickname.values())
+  const scores = Array.from(bestByIp.values())
     .sort((a, b) => b.score - a.score || b.playedAt.localeCompare(a.playedAt))
     .slice(0, LEADERBOARD_LIMIT);
   sendJson(res, 200, { scores });
@@ -130,6 +135,7 @@ function handleScorePost(req, res) {
       score: Math.floor(score),
       playedAt: new Date().toISOString(),
       ipMasked: maskIp(rawIp),
+      ipKey: createIpKey(rawIp),
     };
 
     const scores = readScores();
