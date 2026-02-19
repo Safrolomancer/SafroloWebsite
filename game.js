@@ -37,7 +37,6 @@ async function loadLeaderboard() {
     const data = await response.json();
     renderLeaderboard(data.scores || []);
   } catch {
-    renderLeaderboard([]);
     setStatus("Leaderboard unavailable right now. Please try again later.");
   }
 }

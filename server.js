@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 3000;
 const ROOT = __dirname;
 const DB_DIR = path.join(ROOT, "data");
 const DB_FILE = path.join(DB_DIR, "leaderboard.json");
+const LEADERBOARD_LIMIT = 5;
 
 function ensureDb() {
   if (!fs.existsSync(DB_DIR)) fs.mkdirSync(DB_DIR, { recursive: true });
@@ -80,9 +81,19 @@ function sendFile(res, filePath) {
 }
 
 function handleLeaderboardGet(res) {
-  const scores = readScores()
+  const bestByNickname = new Map();
+  for (const row of readScores()) {
+    const key = String(row.nickname || "").trim().toLowerCase();
+    if (!key) continue;
+    const prev = bestByNickname.get(key);
+    if (!prev || row.score > prev.score || (row.score === prev.score && row.playedAt > prev.playedAt)) {
+      bestByNickname.set(key, row);
+    }
+  }
+
+  const scores = Array.from(bestByNickname.values())
     .sort((a, b) => b.score - a.score || b.playedAt.localeCompare(a.playedAt))
-    .slice(0, 10);
+    .slice(0, LEADERBOARD_LIMIT);
   sendJson(res, 200, { scores });
 }
 
