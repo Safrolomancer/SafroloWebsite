@@ -127,6 +127,36 @@ function handleAdminLeaderboardGet(req, res, url) {
   sendJson(res, 200, { scores });
 }
 
+async function handleGeoGet(req, res) {
+  const rawIp = getClientIp(req);
+  try {
+    const geoResponse = await fetch(`https://ipapi.co/${encodeURIComponent(rawIp)}/json/`);
+    if (!geoResponse.ok) throw new Error("Geo service failed");
+    const data = await geoResponse.json();
+
+    const lat = Number(data.latitude);
+    const lon = Number(data.longitude);
+
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+      sendJson(res, 200, { ok: false, error: "No coordinates available" });
+      return;
+    }
+
+    sendJson(res, 200, {
+      ok: true,
+      city: String(data.city || "Unknown city"),
+      region: String(data.region || ""),
+      country: String(data.country_name || data.country || ""),
+      latitude: lat,
+      longitude: lon,
+      ipMasked: maskIp(rawIp),
+      lookedUpAt: new Date().toISOString(),
+    });
+  } catch {
+    sendJson(res, 200, { ok: false, error: "Geo lookup unavailable" });
+  }
+}
+
 function handleScorePost(req, res) {
   let body = "";
   req.on("data", (chunk) => {
@@ -186,6 +216,11 @@ const server = http.createServer((req, res) => {
 
   if (url.pathname === "/api/score" && req.method === "POST") {
     handleScorePost(req, res);
+    return;
+  }
+
+  if (url.pathname === "/api/geo" && req.method === "GET") {
+    handleGeoGet(req, res);
     return;
   }
 

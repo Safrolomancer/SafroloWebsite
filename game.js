@@ -5,6 +5,8 @@ const timeEl = document.getElementById("time");
 const startBtn = document.getElementById("startBtn");
 const leaderboardBody = document.getElementById("leaderboardBody");
 const gameStatus = document.getElementById("gameStatus");
+const geoStatus = document.getElementById("geoStatus");
+const geoMapEl = document.getElementById("geoMap");
 
 let score = 0;
 let time = 30;
@@ -16,10 +18,76 @@ const API_BASE = "https://safrolowebsite-production.up.railway.app";
 const API = {
   submit: `${API_BASE}/api/score`,
   leaderboard: `${API_BASE}/api/leaderboard`,
+  geo: `${API_BASE}/api/geo`,
 };
 
 function setStatus(message) {
   gameStatus.textContent = message;
+}
+
+function setGeoStatus(country, city, dateText) {
+  geoStatus.innerHTML = `Country: ${country}<br>City: ${city}<br>Date: ${dateText}`;
+}
+
+let geoMap;
+let geoMarker;
+
+function ensureGeoMap() {
+  if (geoMap) return geoMap;
+
+  geoMap = L.map(geoMapEl, {
+    zoomControl: false,
+    attributionControl: true,
+  }).setView([20, 0], 2);
+
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap &copy; CARTO",
+  }).addTo(geoMap);
+
+  setTimeout(() => geoMap.invalidateSize(), 100);
+  return geoMap;
+}
+
+function updateGeoMarker(lat, lon, placeLabel) {
+  const map = ensureGeoMap();
+  const pulseIcon = L.divIcon({
+    className: "",
+    html: '<div class="geo-pulse"></div>',
+    iconSize: [14, 14],
+    iconAnchor: [7, 7],
+  });
+
+  if (!geoMarker) {
+    geoMarker = L.marker([lat, lon], { icon: pulseIcon }).addTo(map);
+  } else {
+    geoMarker.setLatLng([lat, lon]);
+  }
+
+  geoMarker.bindPopup(placeLabel);
+  map.flyTo([lat, lon], 10, { duration: 1.8 });
+}
+
+async function loadGeoLocation() {
+  ensureGeoMap();
+  geoStatus.textContent = "Locating city...";
+  try {
+    const response = await fetch(API.geo);
+    if (!response.ok) throw new Error("Geo API unavailable");
+    const data = await response.json();
+    if (!data.ok) throw new Error(data.error || "No geo data");
+
+    const city = String(data.city || "Unknown");
+    const region = String(data.region || "").trim();
+    const country = String(data.country || "").trim();
+    const place = [city, region, country].filter(Boolean).join(", ");
+    const date = new Date(data.lookedUpAt || Date.now()).toLocaleString();
+
+    updateGeoMarker(Number(data.latitude), Number(data.longitude), place);
+    setGeoStatus(country || "Unknown", city, date);
+  } catch {
+    geoStatus.textContent = "Country: Unknown | City: Unknown | Date: -";
+  }
 }
 
 async function loadLeaderboard() {
@@ -122,3 +190,4 @@ target.addEventListener("click", () => {
 
 startBtn.addEventListener("click", startGame);
 loadLeaderboard();
+loadGeoLocation();
