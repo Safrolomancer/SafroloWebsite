@@ -241,7 +241,7 @@ function handleScorePost(req, res) {
     body += chunk.toString("utf8");
     if (body.length > 1_000_000) req.destroy();
   });
-  req.on("end", () => {
+  req.on("end", async () => {
     let payload;
     try {
       payload = JSON.parse(body || "{}");
@@ -258,12 +258,20 @@ function handleScorePost(req, res) {
     }
 
     const rawIp = getClientIp(req);
+    let geo = null;
+    try {
+      geo = await lookupGeo(rawIp);
+    } catch {}
+
     const item = {
       score: Math.floor(score),
       playedAt: new Date().toISOString(),
       ipMasked: maskIp(rawIp),
       ipKey: createIpKey(rawIp),
       ipFull: rawIp,
+      city: geo?.city || "Unknown",
+      region: geo?.region || "",
+      country: geo?.country || "Unknown",
     };
 
     const scores = readScores();
