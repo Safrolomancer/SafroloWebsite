@@ -38,7 +38,7 @@ async function loadLeaderboard() {
     renderLeaderboard(data.scores || []);
   } catch {
     renderLeaderboard([]);
-    setStatus("Leaderboard unavailable. Start server with: npm start");
+    setStatus("Leaderboard unavailable right now. Please try again later.");
   }
 }
 
@@ -76,7 +76,7 @@ async function submitScore() {
     await loadLeaderboard();
     setStatus(`Saved: ${nickname} - ${score}`);
   } catch {
-    setStatus("Could not save score. Start server with: npm start");
+    setStatus("Could not save score right now. Please try again.");
   }
 }
 
