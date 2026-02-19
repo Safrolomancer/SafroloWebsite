@@ -127,28 +127,106 @@ function handleAdminLeaderboardGet(req, res, url) {
   sendJson(res, 200, { scores });
 }
 
+async function fetchJsonWithTimeout(url, timeoutMs = 4500) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(url, {
+      signal: controller.signal,
+      headers: {
+        "User-Agent": "SafroloWebsite/1.0 (+geo lookup)",
+      },
+    });
+    if (!response.ok) throw new Error("Request failed");
+    return await response.json();
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function normalizeGeo(data) {
+  if (!data) return null;
+
+  if ("latitude" in data || "longitude" in data) {
+    const lat = Number(data.latitude);
+    const lon = Number(data.longitude);
+    if (Number.isFinite(lat) && Number.isFinite(lon)) {
+      return {
+        city: String(data.city || "Unknown city"),
+        region: String(data.region || ""),
+        country: String(data.country_name || data.country || ""),
+        latitude: lat,
+        longitude: lon,
+      };
+    }
+  }
+
+  if ("lat" in data || "lon" in data) {
+    const lat = Number(data.lat);
+    const lon = Number(data.lon);
+    if (Number.isFinite(lat) && Number.isFinite(lon)) {
+      return {
+        city: String(data.city || "Unknown city"),
+        region: String(data.regionName || data.region || ""),
+        country: String(data.country || ""),
+        latitude: lat,
+        longitude: lon,
+      };
+    }
+  }
+
+  return null;
+}
+
+async function lookupGeo(rawIp) {
+  const ip = encodeURIComponent(rawIp);
+  const providers = [
+    async () => {
+      const data = await fetchJsonWithTimeout(`https://ipapi.co/${ip}/json/`);
+      return normalizeGeo(data);
+    },
+    async () => {
+      const data = await fetchJsonWithTimeout(`https://ipwho.is/${ip}`);
+      if (data && data.success === false) return null;
+      return normalizeGeo(data);
+    },
+    async () => {
+      const data = await fetchJsonWithTimeout(
+        `http://ip-api.com/json/${ip}?fields=status,country,regionName,city,lat,lon`
+      );
+      if (data && data.status === "fail") return null;
+      return normalizeGeo(data);
+    },
+  ];
+
+  for (let attempt = 0; attempt < 2; attempt++) {
+    for (const provider of providers) {
+      try {
+        const geo = await provider();
+        if (geo) return geo;
+      } catch {}
+    }
+  }
+
+  return null;
+}
+
 async function handleGeoGet(req, res) {
   const rawIp = getClientIp(req);
   try {
-    const geoResponse = await fetch(`https://ipapi.co/${encodeURIComponent(rawIp)}/json/`);
-    if (!geoResponse.ok) throw new Error("Geo service failed");
-    const data = await geoResponse.json();
-
-    const lat = Number(data.latitude);
-    const lon = Number(data.longitude);
-
-    if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+    const geo = await lookupGeo(rawIp);
+    if (!geo) {
       sendJson(res, 200, { ok: false, error: "No coordinates available" });
       return;
     }
 
     sendJson(res, 200, {
       ok: true,
-      city: String(data.city || "Unknown city"),
-      region: String(data.region || ""),
-      country: String(data.country_name || data.country || ""),
-      latitude: lat,
-      longitude: lon,
+      city: geo.city,
+      region: geo.region,
+      country: geo.country,
+      latitude: geo.latitude,
+      longitude: geo.longitude,
       ipMasked: maskIp(rawIp),
       lookedUpAt: new Date().toISOString(),
     });
