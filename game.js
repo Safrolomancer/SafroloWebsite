@@ -13,6 +13,7 @@ let time = 30;
 let gameInterval;
 let timerInterval;
 let isGameRunning = false;
+let geoLoaded = false;
 
 const API_BASE = "https://safrolowebsite-production.up.railway.app";
 const API = {
@@ -33,6 +34,9 @@ let geoMap;
 let geoMarker;
 
 function ensureGeoMap() {
+  if (typeof L === "undefined") {
+    throw new Error("Leaflet not loaded");
+  }
   if (geoMap) return geoMap;
 
   geoMap = L.map(geoMapEl, {
@@ -69,9 +73,9 @@ function updateGeoMarker(lat, lon, placeLabel) {
 }
 
 async function loadGeoLocation() {
-  ensureGeoMap();
   geoStatus.textContent = "Locating city...";
   try {
+    ensureGeoMap();
     const response = await fetch(API.geo);
     if (!response.ok) throw new Error("Geo API unavailable");
     const data = await response.json();
@@ -86,7 +90,7 @@ async function loadGeoLocation() {
     updateGeoMarker(Number(data.latitude), Number(data.longitude), place);
     setGeoStatus(country || "Unknown", city, date);
   } catch {
-    geoStatus.textContent = "Country: Unknown | City: Unknown | Date: -";
+    geoStatus.textContent = "Map/Geo unavailable right now";
   }
 }
 
@@ -152,6 +156,11 @@ function startGame() {
   startBtn.disabled = true;
   setStatus("");
 
+  if (!geoLoaded) {
+    geoLoaded = true;
+    loadGeoLocation();
+  }
+
   score = 0;
   time = 30;
   scoreEl.textContent = score;
@@ -190,4 +199,3 @@ target.addEventListener("click", () => {
 
 startBtn.addEventListener("click", startGame);
 loadLeaderboard();
-loadGeoLocation();
