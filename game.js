@@ -13,7 +13,6 @@ let time = 30;
 let gameInterval;
 let timerInterval;
 let isGameRunning = false;
-let geoLoaded = false;
 
 const API_BASE = "https://safrolowebsite-production.up.railway.app";
 const API = {
@@ -32,10 +31,25 @@ function setGeoStatus(country, city, dateText) {
 
 let geoMap;
 let geoMarker;
+let fallbackDot;
+let fallbackLabel;
+let usingFallbackMap = false;
 
 function ensureGeoMap() {
   if (typeof L === "undefined") {
-    throw new Error("Leaflet not loaded");
+    usingFallbackMap = true;
+    if (!geoMapEl.dataset.fallbackInit) {
+      geoMapEl.innerHTML = `
+        <div class="geo-fallback-map">
+          <div class="geo-fallback-world"></div>
+          <div class="geo-pulse geo-fallback-dot"></div>
+          <div class="geo-fallback-label"></div>
+        </div>`;
+      fallbackDot = geoMapEl.querySelector(".geo-fallback-dot");
+      fallbackLabel = geoMapEl.querySelector(".geo-fallback-label");
+      geoMapEl.dataset.fallbackInit = "1";
+    }
+    return { mode: "fallback" };
   }
   if (geoMap) return geoMap;
 
@@ -55,6 +69,15 @@ function ensureGeoMap() {
 
 function updateGeoMarker(lat, lon, placeLabel) {
   const map = ensureGeoMap();
+  if (map && map.mode === "fallback") {
+    const x = ((lon + 180) / 360) * 100;
+    const y = ((90 - lat) / 180) * 100;
+    fallbackDot.style.left = `${Math.max(2, Math.min(98, x))}%`;
+    fallbackDot.style.top = `${Math.max(2, Math.min(98, y))}%`;
+    fallbackLabel.textContent = placeLabel;
+    return;
+  }
+
   const pulseIcon = L.divIcon({
     className: "",
     html: '<div class="geo-pulse"></div>',
@@ -89,8 +112,13 @@ async function loadGeoLocation() {
 
     updateGeoMarker(Number(data.latitude), Number(data.longitude), place);
     setGeoStatus(country || "Unknown", city, date);
-  } catch {
-    geoStatus.textContent = "Map/Geo unavailable right now";
+  } catch (error) {
+    console.error("Geo load error:", error);
+    if (usingFallbackMap) {
+      geoStatus.textContent = "Country: Unknown | City: Unknown | Date: -";
+    } else {
+      geoStatus.textContent = "Map/Geo unavailable right now";
+    }
   }
 }
 
@@ -156,10 +184,7 @@ function startGame() {
   startBtn.disabled = true;
   setStatus("");
 
-  if (!geoLoaded) {
-    geoLoaded = true;
-    loadGeoLocation();
-  }
+  loadGeoLocation();
 
   score = 0;
   time = 30;

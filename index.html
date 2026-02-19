@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Matvii Krylov | Software Developer</title>
-  <link rel="stylesheet" href="style.css?v=12">
+  <link rel="stylesheet" href="style.css?v=13">
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -13,31 +13,31 @@
   >
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <canvas id="matrix-bg" aria-hidden="true"></canvas>
 
   <main class="layout">
     <section class="profile-card">
-      <p class="eyebrow">Software Engineering Student</p>
+      <p class="eyebrow">matvii@safrolo:~$ ./profile --load</p>
       <h1>Matvii Krylov</h1>
       <p class="intro">
-        I build clean and practical web interfaces, solve real production bugs, and steadily grow into a reliable full-stack engineer.
+        Software engineering student. Building practical web systems, fixing production issues, and shipping stable updates.
       </p>
       <div class="stack-list" aria-label="Tech and tools">
-        <span>Java</span>
-        <span>JavaScript</span>
-        <span>Python</span>
-        <span>HTML/CSS</span>
-        <span>SQL (basic)</span>
-        <span>Git/GitHub</span>
-        <span>Linux</span>
+        <span>pkg:java</span>
+        <span>pkg:javascript</span>
+        <span>pkg:python</span>
+        <span>pkg:html-css</span>
+        <span>pkg:sql-basic</span>
+        <span>pkg:git-github</span>
+        <span>os:linux</span>
       </div>
 
       <section class="profile-details" aria-label="Profile details">
         <article class="detail-card">
-          <h3>Focus</h3>
+          <h3>$ cat focus.txt</h3>
           <ul>
             <li>Frontend quality and clean UI architecture</li>
             <li>Backend fundamentals and practical problem solving</li>
@@ -45,13 +45,13 @@
         </article>
 
         <article class="detail-card">
-          <h3>Education</h3>
-          <p>Bachelor's (H) in Software Engineering | Student at SETU | Graduating in 2029</p>
-          <p>Bachelor's (H) in Management and Marketing | Student at ONTU | Graduating in 2026</p>
+          <h3>$ cat education.log</h3>
+          <p>Bachelor's (H), Software Engineering | SETU | current student | expected 2029</p>
+          <p>Bachelor's (H), Management and Marketing | ONTU | current student | expected 2026</p>
         </article>
 
         <article class="detail-card">
-          <h3>Experience</h3>
+          <h3>$ cat experience.log</h3>
           <p><strong>Ukrainian Ports Association</strong></p>
           <ul>
             <li>Maintained and curated website pages</li>
@@ -61,7 +61,7 @@
         </article>
 
         <article class="detail-card">
-          <h3>Achievements</h3>
+          <h3>$ cat achievements.log</h3>
           <ul>
             <li>2nd place, Capture The Flag (CTF), Computer Society, South East Technological University</li>
             <li>7th place [Team: FiveFingers], CISPA Cybersecurity and AI European Championship Hackathon, Stockholm, Sweden</li>
@@ -69,20 +69,20 @@
         </article>
 
         <article class="detail-card">
-          <h3>Mindset</h3>
+          <h3>$ cat mindset.txt</h3>
           <p>Build clean systems, ship stable updates, and improve continuously.</p>
         </article>
       </section>
 
       <div class="contact-links">
-        <a href="mailto:m.g.krylovua@gmail.com" target="_blank" rel="noopener noreferrer">Email</a>
-        <a href="https://www.linkedin.com/in/matvii-krylov-600332374/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="https://github.com/Safrolomancer" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="mailto:m.g.krylovua@gmail.com" target="_blank" rel="noopener noreferrer">mail</a>
+        <a href="https://www.linkedin.com/in/matvii-krylov-600332374/" target="_blank" rel="noopener noreferrer">linkedin</a>
+        <a href="https://github.com/Safrolomancer" target="_blank" rel="noopener noreferrer">github</a>
       </div>
     </section>
 
     <aside id="mini-game" class="game-card">
-      <h2>Reflex Mini-Game</h2>
+      <h2>matvii@safrolo:~$ ./reflex_game.sh</h2>
       <div class="game-header">
         <span>Score: <b id="score">0</b></span>
         <span>Time: <b id="time">30</b>s</span>
@@ -92,11 +92,11 @@
         <div class="target" id="target"></div>
       </div>
 
-      <button id="startBtn">Start Game</button>
+      <button id="startBtn">run --game</button>
       <p id="gameStatus" class="game-status" aria-live="polite"></p>
 
       <section class="leaderboard" aria-label="Leaderboard">
-        <h3>Top 5 Leaderboard</h3>
+        <h3>$ top --scores --limit=5</h3>
         <table>
           <thead>
             <tr>
@@ -114,7 +114,7 @@
       </section>
 
       <section class="geo-box" aria-label="Player location">
-        <h3>Player Location (GeoIP)</h3>
+        <h3>$ geoip --trace player</h3>
         <div id="geoMap" class="geo-map"></div>
         <p id="geoStatus" class="geo-status">Locating city...</p>
       </section>
@@ -126,7 +126,7 @@
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""
   ></script>
-  <script src="matrix-bg.js?v=12"></script>
-  <script src="game.js?v=12"></script>
+  <script src="matrix-bg.js?v=13"></script>
+  <script src="game.js?v=13"></script>
 </body>
 </html>
